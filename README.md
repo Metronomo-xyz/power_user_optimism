@@ -3,7 +3,7 @@ Tool to find most valuable users of given smart_contract address on Optimism blo
 
 This module calculates users value score based on usage metrics of given smart contract and stores users with their scores to provided MongoDB database.
 
-After that, you can use most valuable users of given smart contract to create a list of users across whole network, who might be very similar and worth interacting with them (by airdrops, ads etc.). To find similar users use user_similarity_optimism tools from our repositories.
+After that, you can use most valuable users of given smart contract to create a list of users across whole network, who might be very similar and worth interacting with them (by airdrops, ads etc.). To find similar users use [user_similarity_optimism tools](https://github.com/Metronomo-xyz/user_similarity_optimism_calculator) from our repositories.
 
 Module relies on RMF (but withoun monetary part) analysis.
  - module calculates RF score for all users
