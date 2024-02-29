@@ -5,6 +5,11 @@ This module calculates users value score based on usage metrics of given smart c
 
 After that, you can use most valuable users of given smart contract to create a list of users across whole network, who might be very similar and worth interacting with them (by airdrops, ads etc.). To find similar users use user_similarity_optimism tools from our repositories.
 
+Module relies on RMF (but withoun monetary part) analysis.
+ - module calculates RF score for all users
+ - then module defines given quantile of score
+ - then module consider all the users with score higher then quantile as most valuable users (power users)
+
 ## Prerequisites
 
 ### Hardware
@@ -100,14 +105,10 @@ env-files:
 Flag to use publicly available Optimism blockchain data.
 ```
  - USE_PUBLIC_DATA
- ```
-Flag to user publicly available Optimism blockchain data.
 # If `True` data from Metronomo public bucket will be used
 # If `False` - you have to write your own class to get the data from your own storage 
-
+ ```
 For public data START_DATE and DATES_RANGE variables do nothing - data will be taken from static source. We update this example data from time to time, but not regularly.
-
-
 
 Variables to access MongoDB server. You HAVE to set your own
 
@@ -115,7 +116,13 @@ Variables to access MongoDB server. You HAVE to set your own
 - MONGO_HOST - host of mongodb server to write similarities data to
 - MONGO_PORT - port of mongodb server  to write similarities data to
 - MONGO_DATABASE  - mongo database name to write similarities data to
-- MONGO_COLLECTION  - mongo collection name to write similarities data to
+```
+Variables to define which contract to analyze and how
+```
+TARGET_CONTRACT - the contract users of which will be analysed.
+QUANTILE - quantile of value score above which user will be considered as most valuable (power users). Default = 0.95
+WINDOW - window of dates (in number of days) to calculate value score.
+GET_ALL_RFM_WEIGHTS - if True then value score of ALL users of target smart contract inside the window will be stored in Mongo. Significantly increase ammoun of data stored in MongoDB. Use with caution.
 ```
 
 Dates choosing. You might use any START_DATE and DATE_RANGE as you want
@@ -123,26 +130,18 @@ Dates choosing. You might use any START_DATE and DATE_RANGE as you want
 - START_DATE - the last date of the dates period in `ddmmyyyy` format
 - DATES_RANGE - number of days to take into power users calculation. For example, if start date is 12122022 and range 30 then dates will be since 13-11-2022 to 12-12-2022 inclusively
 ```
+
 #### static_config.env
 Config file with environment variables to get public Optimism data from Metronomo cloud storage. DO NOT CHANGE
 ```
-- METRONOMO_PUBLIC_DATA_PROJECT
-- METRONOMO_PUBLIC_DATA_BUCKET_NAME
+- METRONOMO_PUBLIC_DATA_PROJECT - name of the Google Cloud Storage project with public data
+- METRONOMO_PUBLIC_DATA_BUCKET_NAME - name of the bucket with public data
+- METRONOMO_PUBLIC_DATA_BLOB_NAME - name of the bucket with public data
 ```
-
-Variables to configure data removal for similarity calculation.
-
-Change with caution, preferably not change. Leaving popular contracts in calculation will lead to exponential memory and time complexity.
-
-```
-REMOVE_CONTRACTS - these contracts will be removed from similarity calculation (and from user vector representation)
-REMOVE_CONTRACTS_PERCENTILE - Percentile of number overall contract interactions. Contracts in this boundary will be left in calculation. Contracts outside - will be removed
-REMOVE_WALLETS_PERCENTILE - Percentile of number of overall user interactions. Wallets in this boundary will be left in calculation. Wallets outside - will be removed
-```
+We update this example data from time to time, but not regularly.
 
 ### 4. Run the module
 
-```python3 -m user_similarity_optimism_calculator```
+```python3 -m power_user_optimism```
 
-Similarity result will be stored in MongoDB on host, port provided in .env, in database and collections provided in .env
-
+Power users and their scores will be stored in MongoDB on host, port provided in .env, in database and collections equal to the target_contract address
