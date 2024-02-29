@@ -113,9 +113,9 @@ For public data START_DATE and DATES_RANGE variables do nothing - data will be t
 Variables to access MongoDB server. You HAVE to set your own
 
 ```
-- MONGO_HOST - host of mongodb server to write similarities data to
-- MONGO_PORT - port of mongodb server  to write similarities data to
-- MONGO_DATABASE  - mongo database name to write similarities data to
+- MONGO_HOST - host of mongodb server to store power users data
+- MONGO_PORT - port of mongodb server  to store power users data
+- MONGO_DATABASE  - mongo database name to store power users data
 ```
 Variables to define which contract to analyze and how
 ```
